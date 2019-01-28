@@ -24,7 +24,7 @@ To use with an HC-05 (or other) serial Bluetooth transceiver set to `true`
 ![MS5670 Example Application](https://github.com/pvint/Arduino-Altimeter/blob/master/images/Arduino-MS5607-HC05.png?raw=true)
 Example with `#define USE_BLUETOOTH true` (`true` uses JSON output, `false` produces human-readable output)
 ![MS5670 Serial JSON Output](https://github.com/pvint/Arduino-Altimeter/blob/master/images/ConsoleOutputJSON.png?raw=true)
-Temperature is in &deg;C, Barometric Pressue in Pa and Altitude is in meters
+Temperature is in &deg;C, Barometric Pressure in Pa and Altitude is in meters
 
 ## Android App:
 The supplied app is very basic but handy for simple usage and testing.
