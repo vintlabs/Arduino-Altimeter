@@ -31,12 +31,15 @@
 MS5xxx sensor(&Wire);
 
 // Set the reference pressure to the current pressure to get relative altitude changes
-double pressure, temperature, p_ref, t_ref, altitude;
+double pressure, temperature, p_ref, t_ref, altitude, meanPressure, numSamples;
+
 char receivedChar;
 bool newData = false;
 
 void setup() {
-  Serial.begin(9600);
+  numSamples = 20;
+  meanPressure = 0;
+  Serial.begin(115200);
   sensor.setI2Caddr(MS5607_ADDRESS);
   if(sensor.connect()>0) {
     Serial.println("Error connecting...");
@@ -47,6 +50,7 @@ void setup() {
   sensor.ReadProm();
   sensor.Readout();
   p_ref =  sensor.GetPres();
+  //p_ref = 102700;
   t_ref = sensor.GetTemp() / 100.0f;
 
   //Serial.print( "Initial: ");
@@ -94,6 +98,17 @@ void printSerial()
   sensor.Readout();
   temperature = sensor.GetTemp() / 100.0f;
   pressure = sensor.GetPres();
+
+  if (meanPressure == 0)
+  {
+    // On the first run "prefill" the mean value as the current value
+    meanPressure = pressure * numSamples;
+  }
+  else
+  {
+    meanPressure = meanPressure - (meanPressure / numSamples) + pressure;
+    pressure = meanPressure / numSamples;
+  }
   altitude = getAltitude( pressure, p_ref, temperature );
 
     Serial.print("Temp: ");
@@ -151,4 +166,3 @@ void test_crc() {
   Serial.print(sensor.CRCcodeTest(), HEX);
   Serial.println(" (should be 0xB)");
 }
-
